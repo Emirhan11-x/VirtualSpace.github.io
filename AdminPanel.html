@@ -81,13 +81,21 @@
       filter: brightness(0.9);
     }
 
-    .liste {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* En fazla 2 sütun */
-    gap: 40px;
-    justify-items: center;
-    padding: 40px 0;
+.liste {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Geniş ekran için iki sütun */
+  gap: 40px;
+  justify-items: center;
+  padding: 40px 0;
+}
+
+@media (max-width: 700px) {
+  .liste {
+    grid-template-columns: 1fr; /* Küçük ekran için tek sütun */
+    gap: 24px;
+    padding: 24px 0;
   }
+}
 
     .kutucuk {
       background: #1e1e1e;
