@@ -115,31 +115,25 @@
 
   <script>
     function Kontrol() {
-      var yetkiTipi = document.getElementById("YetkiTipi").value;
-      var sifre = document.getElementById("Sifre").value;
+    var kullanici = document.getElementById("YetkiTipi").value;
+    var sifre = document.getElementById("Sifre").value;
 
-      switch (yetkiTipi) {
-        case "Admin":
-          if (sifre == "Luna82x") {
-            window.location.href = "AdminPanel.html";
-          } else {
-            alert("Hatalı şifre!");
-          }
-          break;
-
-        case ("User1881" || "Edanur" ):
-          if (sifre == ("1938"|| "Kılıç" || "Ruhi123") ) {
-            window.location.href = "UserPanel.html";
-          } else {
-            alert("Hatalı şifre!");
-          }
-          break;
-          
-
-        default:
-          alert("Yetki tipi tanınmıyor.");
-      }
+    // Admin kontrolü
+    if (kullanici === "Admin" && sifre === "Luna82x") {
+      window.location.href = "AdminPanel.html";
+      return;
     }
+
+    // User kontrolü
+    var userlar = ["User1881", "Edanur"];
+    var dogruSifreler = ["Ruhi123", "1938", "Kılıç"];
+    if (userlar.includes(kullanici) && dogruSifreler.includes(sifre)) {
+      window.location.href = "UserPanel.html";
+      return;
+    }else{
+    alert("Hatalı kullanıcı adı veya şifre!");
+    }
+  }
   </script>
 
 </body>
