@@ -645,48 +645,60 @@ var diziler = [
 
     var aktifGosterim = "tum"; // "tum", "film", "dizi"
 
-    function kutuOlustur(veri) {
-      var kutu = document.createElement("div");
-      kutu.className = "kutucuk";
-       var silBtn = document.createElement("button");
-      silBtn.className = "sil-buton";
-      silBtn.innerHTML = "&times;";
-      silBtn.onclick = function() {
-        sil(veri, veri.tur);
-      };
-      kutu.appendChild(silBtn);
+  function kutuOlustur(veri) {
+  var kutu = document.createElement("div");
+  kutu.className = "kutucuk";
 
-      var sol = document.createElement("div");
-      sol.className = "sol";
-      var img = document.createElement("img");
-      img.src = veri.url;
-      sol.appendChild(img);
+  var silBtn = document.createElement("button");
+  silBtn.className = "sil-buton";
+  silBtn.innerHTML = "&times;";
+  silBtn.onclick = function() {
+    sil(veri, veri.tur);
+  };
+  kutu.appendChild(silBtn);
 
-      var ad = document.createElement("div");
-      ad.className = "ad";
-      ad.textContent = veri.ad;
-      sol.appendChild(ad);
+  var sol = document.createElement("div");
+  sol.className = "sol";
+  var img = document.createElement("img");
+  img.src = veri.url;
+  sol.appendChild(img);
 
-      var sag = document.createElement("div");
-      sag.className = "sag";
-      var tur = document.createElement("div");
-      tur.className = "ozellik";
-      tur.innerHTML = "<span>Tür:</span> " + (veri.tur || "");
-      var puan = document.createElement("div");
-      puan.className = "ozellik";
-      puan.innerHTML = "<span>IMDb Puanı:</span> " + (veri.puan || "") + "/10";
-      var konu = document.createElement("div");
-      konu.className = "ozellik";
-      konu.innerHTML = "<span>Konu:</span> " + (veri.konu || "");
-      sag.appendChild(tur);
-      sag.appendChild(puan);
-      sag.appendChild(konu);
+  var ad = document.createElement("div");
+  ad.className = "ad";
+  ad.textContent = veri.ad;
+  sol.appendChild(ad);
 
-      kutu.appendChild(sol);
-      kutu.appendChild(sag);
-      return kutu;
+  var sag = document.createElement("div");
+  sag.className = "sag";
+  var tur = document.createElement("div");
+  tur.className = "ozellik";
+  tur.innerHTML = "<span>Tür:</span> " + (veri.tur || "");
+  var puan = document.createElement("div");
+  puan.className = "ozellik";
+  puan.innerHTML = "<span>IMDb Puanı:</span> " + (veri.puan || "") + "/10";
+  var konu = document.createElement("div");
+  konu.className = "ozellik";
+  konu.innerHTML = "<span>Konu:</span> " + (veri.konu || "") ;
+
+  // Burada Web URL görünmeyecek, o yüzden weburlDiv'i kaldırdım.
+
+  sag.appendChild(tur);
+  sag.appendChild(puan);
+  sag.appendChild(konu);
+
+  kutu.appendChild(sol);
+  kutu.appendChild(sag);
+
+  // Kutucuk çift tıklanınca yeni sekmede URL açılır
+  kutu.ondblclick = function() {
+    if (veri.webURL && veri.webURL.trim() !== "") {
+      var url = veri.webURL.trim();
+      if (!url.match(/^https?:\/\//)) {
+        url = "http://" + url; // Eksikse http ekle
+      }
+      window.open(url, "_blank");
     }
-
+  };
     function filtreliGoster() {
       var arama = document.getElementById("AramaCubugu").value.trim().toLowerCase();
       var filmDiv = document.getElementById("Film");
@@ -716,47 +728,52 @@ var diziler = [
     
 
     // Modal açma
-    function Ekle() {
-      var modal = document.getElementById("ekleModal");
-      modal.innerHTML = `
-        <div class="modal-arkaplan" onclick="if(event.target.classList.contains('modal-arkaplan')) KapatModal()">
-          <div class="modal-kutu">
-            <div class="modal-baslik">Add</div>
-            <button class="modal-kapat" onclick="KapatModal()" title="Kapat">&times;</button>
-            <form class="modal-form" onsubmit="ModalEkle(event)">
-              <div>
-                <label for="modal-ad">İsim</label>
-                <input type="text" id="modal-ad" required autocomplete="off" />
-              </div>
-              <div>
-                <label>Tür</label>
-                <div class="tursecenek">
-                  <button type="button" class="secili" id="modal-tur-film" onclick="TurSec('film', this)">film</button>
-                  <button type="button" id="modal-tur-dizi" onclick="TurSec('dizi', this)">dizi</button>
-                </div>
-                <input type="hidden" id="modal-tur" value="film" />
-              </div>
-              <div>
-                <label for="modal-puan">Puan</label>
-                <input type="text" id="modal-puan" required autocomplete="off" />
-              </div>
-              <div>
-                <label for="modal-konu">Konu</label>
-                <textarea id="modal-konu" rows="2" required></textarea>
-              </div>
-              <div>
-                <label for="modal-url">resim url</label>
-                <input type="text" id="modal-url" required autocomplete="off" />
-              </div>
-              <div class="modal-ekle-row">
-                <button type="submit" class="modal-ekle-btn">ekle</button>
-              </div>
-            </form>
+function Ekle() {
+  var modal = document.getElementById("ekleModal");
+  modal.innerHTML = `
+    <div class="modal-arkaplan" onclick="if(event.target.classList.contains('modal-arkaplan')) KapatModal()">
+      <div class="modal-kutu">
+        <div class="modal-baslik">Add</div>
+        <button class="modal-kapat" onclick="KapatModal()" title="Kapat">&times;</button>
+        <form class="modal-form" onsubmit="ModalEkle(event)">
+          <div>
+            <label for="modal-ad">İsim</label>
+            <input type="text" id="modal-ad" required autocomplete="off" />
           </div>
-        </div>
-      `;
-      modal.style.display = "block";
-    }
+          <div>
+            <label>Tür</label>
+            <div class="tursecenek">
+              <button type="button" class="secili" id="modal-tur-film" onclick="TurSec('film', this)">film</button>
+              <button type="button" id="modal-tur-dizi" onclick="TurSec('dizi', this)">dizi</button>
+            </div>
+            <input type="hidden" id="modal-tur" value="film" />
+          </div>
+          <div>
+            <label for="modal-puan">Puan</label>
+            <input type="text" id="modal-puan" required autocomplete="off" />
+          </div>
+          <div>
+            <label for="modal-konu">Konu</label>
+            <textarea id="modal-konu" rows="2" required></textarea>
+          </div>
+          <div>
+            <label for="modal-url">resim url</label>
+            <input type="text" id="modal-url" required autocomplete="off" />
+          </div>
+          <!-- ✅ EKLENEN KISIM -->
+          <div>
+            <label for="modal-web-url">Web URL</label>
+            <input type="text" id="modal-web-url" placeholder="https://..." autocomplete="off" />
+          </div>
+          <div class="modal-ekle-row">
+            <button type="submit" class="modal-ekle-btn">ekle</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+  modal.style.display = "block";
+}
 
     // Tür seçimi için fonksiyon
     function TurSec(tur, btn) {
@@ -772,20 +789,23 @@ var diziler = [
     }
 
     // Modal formdan ekle
-    function ModalEkle(e) {
+   function ModalEkle(e) {
       e.preventDefault();
       var ad = document.getElementById("modal-ad").value.trim();
       var tur = document.getElementById("modal-tur").value;
       var puan = document.getElementById("modal-puan").value.trim();
       var konu = document.getElementById("modal-konu").value.trim();
       var url = document.getElementById("modal-url").value.trim();
+      var webURL = document.getElementById("modal-web-url").value.trim();
+
 
       var veri = {
         url: url,
         ad: ad,
         tur: tur === "film" ? "Film" : "Dizi",
         puan: puan,
-        konu: konu
+        konu: konu,
+        webURL: webURL 
       };
 
       if (tur === "film") {
