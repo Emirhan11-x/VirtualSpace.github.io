@@ -465,45 +465,64 @@ var diziler = [
     tur: "Dizi",
     puan: "8.3",
     konu: "Bir uçak kazasından kurtulanlar, görünüşte ıssız bir tropik adada hayatta kalabilmek için birlikte çalışmak zorunda kalırlar."
+    webURL: "https://www.imdb.com/title/tt1375666/"
   }
 ];
     
-    var aktifGosterim = "tum"; // "tum", "film", "dizi"
+function kutuOlustur(veri) {
+  var kutu = document.createElement("div");
+  kutu.className = "kutucuk";
 
-    function kutuOlustur(veri) {
-      var kutu = document.createElement("div");
-      kutu.className = "kutucuk";
+  var silBtn = document.createElement("button");
+  silBtn.className = "sil-buton";
+  silBtn.innerHTML = "&times;";
+  silBtn.onclick = function() {
+    sil(veri, veri.tur);
+  };
+  kutu.appendChild(silBtn);
 
-      var sol = document.createElement("div");
-      sol.className = "sol";
-      var img = document.createElement("img");
-      img.src = veri.url;
-      sol.appendChild(img);
+  var sol = document.createElement("div");
+  sol.className = "sol";
+  var img = document.createElement("img");
+  img.src = veri.url;
+  sol.appendChild(img);
 
-      var ad = document.createElement("div");
-      ad.className = "ad";
-      ad.textContent = veri.ad;
-      sol.appendChild(ad);
+  var ad = document.createElement("div");
+  ad.className = "ad";
+  ad.textContent = veri.ad;
+  sol.appendChild(ad);
 
-      var sag = document.createElement("div");
-      sag.className = "sag";
-      var tur = document.createElement("div");
-      tur.className = "ozellik";
-      tur.innerHTML = "<span>Tür:</span> " + (veri.tur || "");
-      var puan = document.createElement("div");
-      puan.className = "ozellik";
-      puan.innerHTML = "<span>IMDb Puanı:</span> " + (veri.puan || "") + "/10";
-      var konu = document.createElement("div");
-      konu.className = "ozellik";
-      konu.innerHTML = "<span>Konu:</span> " + (veri.konu || "");
-      sag.appendChild(tur);
-      sag.appendChild(puan);
-      sag.appendChild(konu);
+  var sag = document.createElement("div");
+  sag.className = "sag";
+  var tur = document.createElement("div");
+  tur.className = "ozellik";
+  tur.innerHTML = "<span>Tür:</span> " + (veri.tur || "");
+  var puan = document.createElement("div");
+  puan.className = "ozellik";
+  puan.innerHTML = "<span>IMDb Puanı:</span> " + (veri.puan || "") + "/10";
+  var konu = document.createElement("div");
+  konu.className = "ozellik";
+  konu.innerHTML = "<span>Konu:</span> " + (veri.konu || "") ;
 
-      kutu.appendChild(sol);
-      kutu.appendChild(sag);
-      return kutu;
+  // Burada Web URL görünmeyecek, o yüzden weburlDiv'i kaldırdım.
+
+  sag.appendChild(tur);
+  sag.appendChild(puan);
+  sag.appendChild(konu);
+
+  kutu.appendChild(sol);
+  kutu.appendChild(sag);
+
+  // Kutucuk çift tıklanınca yeni sekmede URL açılır
+  kutu.ondblclick = function() {
+    if (veri.webURL && veri.webURL.trim() !== "") {
+      var url = veri.webURL.trim();
+      if (!url.match(/^https?:\/\//)) {
+        url = "http://" + url; // Eksikse http ekle
+      }
+      window.open(url, "_blank");
     }
+  };
 
     function filtreliGoster() {
       var arama = document.getElementById("AramaCubugu").value.trim().toLowerCase();
